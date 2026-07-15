@@ -1,10 +1,10 @@
 const express=require("express")
 const cors=require("cors")
 const dotenv=require("dotenv")
+dotenv.config()
 const cookieParser=require("cookie-parser")
 const connectDB=require("./config/db")
 const imageRoutes=require("./routes/imageRoutes")
-dotenv.config()
 
 const app=express()
 app.use(cors())
