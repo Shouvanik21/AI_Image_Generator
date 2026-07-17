@@ -4,6 +4,7 @@ const CryptoJS = require("crypto-js");
 const axios = require("axios");
 const cloudinary = require("../config/cloudinary");
 const streamifier = require("streamifier");
+const ai = require("../config/googleAI");
 
 const home = (req, res) => {
   try {
@@ -37,63 +38,29 @@ const home = (req, res) => {
 const generateImage = async (req, res) => {
   try {
     const { prompt, model } = req.body;
-
     const visitorId = req.cookies.visitorId_cookie;
 
+    if (!prompt || !model) {
+      return res.status(400).json({
+        message: "Prompt and model are required",
+      });
+    }
+
     if (!visitorId) {
-      return res.status(401).json({
+      return res.status(400).json({
         message: "Visitor ID not found",
       });
     }
 
-    if (!prompt || !model) {
-      return res.status(400).json({
-        message: "Prompt and Model are required",
-      });
-    }
+    // Generate a random seed so every request gets a different image
+    const seed = Math.floor(Math.random() * 1000000000);
 
-//     console.log("Prompt:", prompt);
-// console.log("Model:", model);
-    const response = await axios.post(
-  "https://image.pollinations.ai/openai/v1/images/generations",
-  {
-    model: "flux",
-    prompt: "A cute cat",
-    size: "1024x1024",
-    n: 1,
-  },
-  {
-    responseType: "arraybuffer",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  }
-);
-// console.log(response.headers["content-type"]);
-    const imageBuffer = Buffer.from(response.data);
-    // console.log("Image size:", imageBuffer.length);
+    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(
+      prompt
+    )}?model=${model}&seed=${seed}&width=1024&height=1024&nologo=true`;
 
-    const cloudinaryResponse = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          folder: "AI-Image-Studio",
-        },
-        (error, result) => {
-          if (error) {
-            return reject(error);
-          }
-
-          resolve(result);
-        },
-      );
-
-      streamifier.createReadStream(imageBuffer).pipe(uploadStream);
-    });
-
-    // console.log(cloudinaryResponse);
-
-    const imageUrl = cloudinaryResponse.secure_url;
     const encryptedImageUrl = encryptImageUrl(imageUrl);
+
     const image = new imageModel({
       visitorId,
       model,
@@ -103,17 +70,16 @@ const generateImage = async (req, res) => {
     await image.save();
 
     res.status(200).json({
-      success:true,
-      message: "Image Generated Successfully",
-      imageUrl
+      success: true,
+      message: "Image generated successfully",
+      imageUrl,
     });
-  } catch (err) {
-    console.log(err.response?.status);
-  console.log(err.response?.data);
-  console.log(err.message);
+  } catch (error) {
+    console.log(error);
 
     res.status(500).json({
-      messaage: "Error generating image",
+      success: false,
+      message: "Error generating image",
     });
   }
 };
