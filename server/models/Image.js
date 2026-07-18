@@ -6,6 +6,11 @@ const ImageSchema = new mongoose.Schema({
     required: true,
   },
 
+  prompt: {
+    type: String,
+    required: true,
+  },
+
   model: {
     type: String,
     required: true,
@@ -14,6 +19,11 @@ const ImageSchema = new mongoose.Schema({
   encryptedImageUrl: {
     type: String,
     required: true,
+  },
+
+  favorite: {
+    type: Boolean,
+    default: false,
   },
 
   createdAt: {
