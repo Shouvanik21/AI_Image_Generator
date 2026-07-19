@@ -52,7 +52,7 @@ function ModelSelector() {
         </button>
 
         {open && (
-          <div className="absolute mt-2 w-full rounded-2xl border border-white/10 bg-[#18181C] overflow-hidden z-50">
+          <div className="absolute mt-2 w-full rounded-xl border border-white/10 bg-[#18181C] overflow-hidden z-50">
 
             {models.map((model) => (
 

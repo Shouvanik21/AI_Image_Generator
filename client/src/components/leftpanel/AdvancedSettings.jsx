@@ -3,7 +3,7 @@ import { ChevronDown } from "lucide-react";
 function AdvancedSettings() {
   return (
     <button
-      className="w-full h-10 px-4 rounded-xl bg-[#18181C] border border-white/10 flex items-center justify-between hover:border-violet-500 transition"
+      className="w-full h-10 px-4 rounded-xl bg-[#18181C] border border-white/10 flex items-center justify-between hover:border-violet-500 transition mt-1"
     >
 
       <span className="text-white text-sm">

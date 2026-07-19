@@ -8,7 +8,7 @@ import GenerateButton from "./leftpanel/GenerateButton";
 
 function LeftPanel() {
   return (
-    <div className="h-full px-6 py-4 flex flex-col">
+    <div className="h-full px-6 py-5 flex flex-col">
 
       <Heading />
 
