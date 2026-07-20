@@ -1,20 +1,50 @@
 import { WandSparkles } from "lucide-react";
+import imageApi from "../../services/imageApi";
 
-function GenerateButton() {
+function GenerateButton({
+  prompt,
+  setGeneratedImage,
+  loading,
+  setLoading,
+  aspectRatio,
+}) {
+  const generateImage = async () => {
+    if (!prompt.trim()) {
+      alert("Please enter a prompt.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const { data } = await imageApi.post("/generateimage", {
+        prompt,
+        model: "flux",
+        aspectRatio,
+      });
+
+      console.log(data);
+
+      setGeneratedImage(data.imageUrl);
+    } catch (error) {
+      console.log(error);
+
+      alert("Image generation failed.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div>
+    <button
+      onClick={generateImage}
+      disabled={loading}
+      className="w-full h-11 rounded-xl bg-gradient-to-r from-violet-600 via-fuchsia-500 to-pink-500 text-white font-semibold flex items-center justify-center gap-2 hover:scale-[1.01] transition mt-1 disabled:opacity-60"
+    >
+      <WandSparkles size={18} />
 
-      <button
-        className="w-full h-11 rounded-xl bg-gradient-to-r from-violet-600 via-fuchsia-500 to-pink-500 text-white font-semibold flex items-center justify-center gap-2 hover:scale-[1.01] transition mt-1"
-      >
-
-        <WandSparkles size={18} />
-
-        Generate Image
-
-      </button>
-
-    </div>
+      {loading ? "Generating..." : "Generate Image"}
+    </button>
   );
 }
 

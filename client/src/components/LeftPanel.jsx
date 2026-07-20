@@ -6,14 +6,22 @@ import AspectRatio from "./leftpanel/AspectRatio";
 import AdvancedSettings from "./leftpanel/AdvancedSettings";
 import GenerateButton from "./leftpanel/GenerateButton";
 
-function LeftPanel() {
+function LeftPanel({
+    prompt,
+    setPrompt,
+    generatedImage,
+    setGeneratedImage,
+    loading,
+    setLoading,
+    aspectRatio,
+    setAspectRatio
+}) {
   return (
     <div className="h-full px-6 py-5 flex flex-col">
-
       <Heading />
 
       <div className="mt-3">
-        <PromptSection />
+        <PromptSection prompt={prompt} setPrompt={setPrompt} />
       </div>
 
       <div className="mt-3">
@@ -25,7 +33,10 @@ function LeftPanel() {
       </div>
 
       <div className="mt-3">
-        <AspectRatio />
+        <AspectRatio
+          aspectRatio={aspectRatio}
+          setAspectRatio={setAspectRatio}
+        />
       </div>
 
       <div className="mt-3">
@@ -33,9 +44,14 @@ function LeftPanel() {
       </div>
 
       <div className="mt-3">
-        <GenerateButton />
+        <GenerateButton
+          prompt={prompt}
+          setGeneratedImage={setGeneratedImage}
+          loading={loading}
+          setLoading={setLoading}
+          aspectRatio={aspectRatio}
+        />
       </div>
-
     </div>
   );
 }

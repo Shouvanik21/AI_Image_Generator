@@ -15,6 +15,7 @@ const home = (req, res) => {
       res.cookie("visitorId_cookie", visitorId, {
         httpOnly: true,
         maxAge: 365 * 24 * 60 * 60 * 1000,
+        sameSite: "lax",
       });
 
       console.log("New Visitor:", visitorId);
@@ -36,8 +37,12 @@ const home = (req, res) => {
 
 const generateImage = async (req, res) => {
   try {
-    const { prompt, model } = req.body;
+    const { prompt, model, aspectRatio } = req.body;
     const visitorId = req.cookies.visitorId_cookie;
+
+    console.log("Prompt:", prompt);
+    console.log("Model:", model);
+    console.log("Visitor ID:", visitorId);
 
     if (!prompt || !model) {
       return res.status(400).json({
@@ -54,9 +59,38 @@ const generateImage = async (req, res) => {
     // Generate a random seed so every request gets a different image
     const seed = Math.floor(Math.random() * 1000000000);
 
+    let width = 1024;
+let height = 1024;
+
+switch (aspectRatio) {
+    case "16:9":
+        width = 1280;
+        height = 720;
+        break;
+
+    case "9:16":
+        width = 720;
+        height = 1280;
+        break;
+
+    case "4:3":
+        width = 1024;
+        height = 768;
+        break;
+
+    case "3:4":
+        width = 768;
+        height = 1024;
+        break;
+
+    default:
+        width = 1024;
+        height = 1024;
+}
+
     const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(
-      prompt
-    )}?model=${model}&seed=${seed}&width=1024&height=1024&nologo=true`;
+  prompt
+)}?model=${model}&seed=${seed}&width=${width}&height=${height}&nologo=true`;
 
     const encryptedImageUrl = encryptImageUrl(imageUrl);
 
@@ -75,7 +109,8 @@ const generateImage = async (req, res) => {
       imageUrl,
     });
   } catch (error) {
-    console.log(error);
+    console.log(error.response.data);
+  console.log(error.response.status);
 
     res.status(500).json({
       success: false,

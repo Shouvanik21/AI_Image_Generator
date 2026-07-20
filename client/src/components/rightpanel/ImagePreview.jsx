@@ -1,17 +1,17 @@
 import { Download } from "lucide-react";
 
-function ImagePreview() {
+function ImagePreview({ generatedImage }) {
   return (
     <div className="relative">
-
       <div className="w-full h-[340px] rounded-xl overflow-hidden bg-[#18181C] border border-white/10">
-
         <img
-          src="https://images.unsplash.com/photo-1519608487953-e999c86e7455?q=80&w=1400"
-          alt=""
-          className="w-full h-full object-cover"
+          src={
+            generatedImage ||
+            "https://placehold.co/1024x768/18181C/FFFFFF?text=Generate+an+Image"
+          }
+          alt="Generated"
+          className="w-full h-full object-cover bg-black"
         />
-
       </div>
 
       <button
@@ -33,12 +33,8 @@ function ImagePreview() {
         transition
         "
       >
-        <Download
-          size={18}
-          className="text-white"
-        />
+        <Download size={18} className="text-white" />
       </button>
-
     </div>
   );
 }

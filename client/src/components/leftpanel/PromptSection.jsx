@@ -1,9 +1,9 @@
 import { CircleHelp, Shuffle } from "lucide-react";
-import { useState } from "react";
 
-function PromptSection() {
-
-  const [prompt, setPrompt] = useState("");
+function PromptSection({
+  prompt,
+  setPrompt,
+}) {
 
   return (
     <div>
