@@ -1,16 +1,14 @@
 import { useState } from "react";
 
-function AspectRatio() {
+function AspectRatio({ aspectRatio, setAspectRatio }) {
   const ratios = [
-    "Default",
-    "1:1",
-    "16:9",
-    "9:16",
-    "4:3",
-    "3:4",
-  ];
-
-  const [selected, setSelected] = useState("1:1");
+  "default",
+  "1:1",
+  "16:9",
+  "9:16",
+  "4:3",
+  "3:4",
+];
 
   return (
     <div>
@@ -25,16 +23,16 @@ function AspectRatio() {
 
           <button
             key={ratio}
-            onClick={() => setSelected(ratio)}
+            onClick={() => setAspectRatio(ratio)}
             className={`h-10 rounded-xl border text-sm font-medium transition
 
             ${
-              selected === ratio
+              aspectRatio === ratio
                 ? "bg-violet-600 border-violet-600 text-white"
                 : "bg-[#18181C] border-white/10 text-gray-300 hover:border-violet-500"
             }`}
           >
-            {ratio}
+            {ratio === "default" ? "Default" : ratio}
           </button>
 
         ))}

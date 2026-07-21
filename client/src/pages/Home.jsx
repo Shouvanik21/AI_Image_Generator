@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
-import LeftPanel from "../components/LeftPanel";
-import RightPanel from "../components/RightPanel";
+import LeftPanel from "../components/leftpanel/LeftPanel";
+import RightPanel from "../components/rightpanel/RightPanel";
 import imageApi from "../services/imageApi";
 
 function Home() {
@@ -11,7 +11,9 @@ function Home() {
 
   const [loading, setLoading] = useState(false);
 
-  const [aspectRatio, setAspectRatio] = useState("1:1");
+  const [aspectRatio, setAspectRatio] = useState("default");
+
+  const [generatedAspectRatio, setGeneratedAspectRatio] = useState("default");
 
   const [model, setModel] = useState("@cf/black-forest-labs/flux-1-schnell");
 
@@ -44,13 +46,18 @@ function Home() {
             setLoading={setLoading}
             aspectRatio={aspectRatio}
             setAspectRatio={setAspectRatio}
+            generatedAspectRatio={generatedAspectRatio}
+    setGeneratedAspectRatio={setGeneratedAspectRatio}
             model={model}
             setModel={setModel}
           />
         </div>
 
         <div className="p-1">
-          <RightPanel generatedImage={generatedImage} />
+          <RightPanel
+    generatedImage={generatedImage}
+    aspectRatio={generatedAspectRatio}
+/>
         </div>
       </div>
     </div>

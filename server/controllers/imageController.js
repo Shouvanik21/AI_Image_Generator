@@ -58,46 +58,44 @@ const generateImage = async (req, res) => {
     let width = 1024;
     let height = 400;
 
-    switch (aspectRatio) {
-      case "default":
-        width = 1024;
-        height = 400;
-        break;
-
-      case "1:1":
-        width = 1024;
-        height = 1024;
-        break;
-
-      case "16:9":
-        width = 1280;
-        height = 720;
-        break;
-
-      case "9:16":
-        width = 720;
-        height = 1280;
-        break;
-
-      case "4:3":
-        width = 1024;
-        height = 768;
-        break;
-
-      case "3:4":
-        width = 768;
-        height = 1024;
-        break;
-    }
-
-    // console.log("Selected model:", model);
-
     const axios = require("axios");
 
     let imageData;
+    let resizedBuffer;
 
-    const PREVIEW_WIDTH = 1728;
-    const PREVIEW_HEIGHT = 806;
+    let previewWidth = 1728;
+    let previewHeight = 806;
+
+    switch (aspectRatio) {
+      case "1:1":
+        previewWidth = 806;
+        previewHeight = 806;
+        break;
+
+      case "16:9":
+        previewWidth = 1432;
+        previewHeight = 806;
+        break;
+
+      case "9:16":
+        previewWidth = 454;
+        previewHeight = 806;
+        break;
+
+      case "4:3":
+        previewWidth = 1074;
+        previewHeight = 806;
+        break;
+
+      case "3:4":
+        previewWidth = 604;
+        previewHeight = 806;
+        break;
+
+      default:
+        previewWidth = 1728;
+        previewHeight = 806;
+    }
 
     if (model === "@cf/black-forest-labs/flux-1-schnell") {
       // Flux Schnell returns JSON
@@ -123,12 +121,22 @@ const generateImage = async (req, res) => {
       const imageBuffer = Buffer.from(base64Image, "base64");
 
       // Resize to preview size
-      const resizedBuffer = await sharp(imageBuffer)
-        .resize(PREVIEW_WIDTH, PREVIEW_HEIGHT, {
-          fit: "fill", // fills entire preview
-        })
-        .png()
-        .toBuffer();
+      if (aspectRatio === "default") {
+        resizedBuffer = await sharp(imageBuffer)
+          .resize(previewWidth, previewHeight, {
+            fit: "fill",
+          })
+          .png()
+          .toBuffer();
+      } else {
+        resizedBuffer = await sharp(imageBuffer)
+          .resize(previewWidth, previewHeight, {
+            fit: "contain",
+            background: { r: 0, g: 0, b: 0, alpha: 1 },
+          })
+          .png()
+          .toBuffer();
+      }
 
       // Convert back to base64
       imageData = `data:image/png;base64,${resizedBuffer.toString("base64")}`;
@@ -154,11 +162,20 @@ const generateImage = async (req, res) => {
       const contentType = response.headers["content-type"];
 
       // Resize
-      const resizedBuffer = await sharp(response.data)
-        .resize(864, 403, {
-          fit: "fill",
-        })
-        .toBuffer();
+      if (aspectRatio === "default") {
+        resizedBuffer = await sharp(response.data)
+          .resize(previewWidth, previewHeight, {
+            fit: "fill",
+          })
+          .toBuffer();
+      } else {
+        resizedBuffer = await sharp(response.data)
+          .resize(previewWidth, previewHeight, {
+            fit: "contain",
+            background: { r: 0, g: 0, b: 0, alpha: 1 },
+          })
+          .toBuffer();
+      }
 
       imageData = `data:${contentType};base64,${resizedBuffer.toString("base64")}`;
     }
@@ -179,6 +196,8 @@ const generateImage = async (req, res) => {
       image: imageData,
     });
   } catch (error) {
+    console.log(error);
+    console.log(error.message);
     console.log("Status:", error.response?.status);
     console.log("Data:", error.response?.data);
 

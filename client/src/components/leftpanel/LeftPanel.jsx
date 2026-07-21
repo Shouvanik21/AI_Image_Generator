@@ -1,10 +1,10 @@
-import Heading from "./leftpanel/Heading";
-import PromptSection from "./leftpanel/PromptSection";
-import ModelSelector from "./leftpanel/ModelSelector";
-import SliderSection from "./leftpanel/SliderSection";
-import AspectRatio from "./leftpanel/AspectRatio";
-import AdvancedSettings from "./leftpanel/AdvancedSettings";
-import GenerateButton from "./leftpanel/GenerateButton";
+import Heading from "./Heading";
+import PromptSection from "./PromptSection";
+import ModelSelector from "./ModelSelector";
+import SliderSection from "./SliderSection";
+import AspectRatio from "./AspectRatio";
+import AdvancedSettings from "./AdvancedSettings";
+import GenerateButton from "./GenerateButton";
 
 function LeftPanel({
   prompt,
@@ -16,7 +16,7 @@ function LeftPanel({
   aspectRatio,
   setAspectRatio,
   model,
-  setModel,
+  setModel,setGeneratedAspectRatio
 }) {
   return (
     <div className="h-full px-6 py-5 flex flex-col">
@@ -52,6 +52,7 @@ function LeftPanel({
           loading={loading}
           setLoading={setLoading}
           aspectRatio={aspectRatio}
+          setGeneratedAspectRatio={setGeneratedAspectRatio}
           model={model}
         />
       </div>

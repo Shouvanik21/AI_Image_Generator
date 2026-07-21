@@ -1,6 +1,9 @@
 import { Download,Heart } from "lucide-react";
 
-function ImagePreview({ generatedImage }) {
+function ImagePreview({ generatedImage, aspectRatio }) {
+
+  console.log("Aspect Ratio:", aspectRatio);
+  
   return (
     <div className="relative">
       <div className="w-full h-[405px] rounded-xl overflow-hidden bg-[#18181C] border border-white/10">
@@ -10,7 +13,9 @@ function ImagePreview({ generatedImage }) {
             "https://placehold.co/1024x768/18181C/FFFFFF?text=Generate+an+Image"
           }
           alt="Generated"
-          className="w-full h-full object-cover bg-black"
+          className={`w-full h-full ${
+  aspectRatio === "default" ? "object-cover" : "object-contain"
+} bg-black`}
         />
       </div>
 
@@ -38,8 +43,8 @@ function ImagePreview({ generatedImage }) {
       <button
         className="
         absolute
-        top-16
-        right-4
+        top-4
+        right-16
         w-10
         h-10
         rounded-xl
