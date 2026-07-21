@@ -7,6 +7,7 @@ function GenerateButton({
   loading,
   setLoading,
   aspectRatio,
+  model
 }) {
   const generateImage = async () => {
     if (!prompt.trim()) {
@@ -19,13 +20,13 @@ function GenerateButton({
 
       const { data } = await imageApi.post("/generateimage", {
         prompt,
-        model: "flux",
+        model,
         aspectRatio,
       });
 
       console.log(data);
 
-      setGeneratedImage(data.imageUrl);
+      setGeneratedImage(data.image);
     } catch (error) {
       console.log(error);
 

@@ -7,14 +7,16 @@ import AdvancedSettings from "./leftpanel/AdvancedSettings";
 import GenerateButton from "./leftpanel/GenerateButton";
 
 function LeftPanel({
-    prompt,
-    setPrompt,
-    generatedImage,
-    setGeneratedImage,
-    loading,
-    setLoading,
-    aspectRatio,
-    setAspectRatio
+  prompt,
+  setPrompt,
+  generatedImage,
+  setGeneratedImage,
+  loading,
+  setLoading,
+  aspectRatio,
+  setAspectRatio,
+  model,
+  setModel,
 }) {
   return (
     <div className="h-full px-6 py-5 flex flex-col">
@@ -25,7 +27,7 @@ function LeftPanel({
       </div>
 
       <div className="mt-3">
-        <ModelSelector />
+        <ModelSelector model={model} setModel={setModel} />
       </div>
 
       <div className="mt-3">
@@ -50,6 +52,7 @@ function LeftPanel({
           loading={loading}
           setLoading={setLoading}
           aspectRatio={aspectRatio}
+          model={model}
         />
       </div>
     </div>

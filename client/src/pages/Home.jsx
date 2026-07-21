@@ -13,6 +13,8 @@ function Home() {
 
   const [aspectRatio, setAspectRatio] = useState("1:1");
 
+  const [model, setModel] = useState("@cf/black-forest-labs/flux-1-schnell");
+
   useEffect(() => {
     const initializeVisitor = async () => {
       try {
@@ -42,6 +44,8 @@ function Home() {
             setLoading={setLoading}
             aspectRatio={aspectRatio}
             setAspectRatio={setAspectRatio}
+            model={model}
+            setModel={setModel}
           />
         </div>
 

@@ -40,9 +40,9 @@ const generateImage = async (req, res) => {
     const { prompt, model, aspectRatio } = req.body;
     const visitorId = req.cookies.visitorId_cookie;
 
-    console.log("Prompt:", prompt);
-    console.log("Model:", model);
-    console.log("Visitor ID:", visitorId);
+    // console.log("Prompt:", prompt);
+    // console.log("Model:", model);
+    // console.log("Visitor ID:", visitorId);
 
     if (!prompt || !model) {
       return res.status(400).json({
@@ -56,43 +56,57 @@ const generateImage = async (req, res) => {
       });
     }
 
-    // Generate a random seed so every request gets a different image
-    const seed = Math.floor(Math.random() * 1000000000);
-
     let width = 1024;
-let height = 1024;
+    let height = 1024;
 
-switch (aspectRatio) {
-    case "16:9":
+    switch (aspectRatio) {
+      case "16:9":
         width = 1280;
         height = 720;
         break;
 
-    case "9:16":
+      case "9:16":
         width = 720;
         height = 1280;
         break;
 
-    case "4:3":
+      case "4:3":
         width = 1024;
         height = 768;
         break;
 
-    case "3:4":
+      case "3:4":
         width = 768;
         height = 1024;
         break;
 
-    default:
+      default:
         width = 1024;
         height = 1024;
-}
+    }
 
-    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(
-  prompt
-)}?model=${model}&seed=${seed}&width=${width}&height=${height}&nologo=true`;
+    console.log("Selected model:", model);
 
-    const encryptedImageUrl = encryptImageUrl(imageUrl);
+    const axios = require("axios");
+
+    const response = await axios.post(
+      `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/ai/run/${model}`,
+      {
+        prompt,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.CLOUDFLARE_API_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    const base64Image = response.data.result.image;
+
+    const imageData = `data:image/jpeg;base64,${base64Image}`;
+
+    const encryptedImageUrl = encryptImageUrl(imageData);
 
     const image = new imageModel({
       visitorId,
@@ -105,18 +119,17 @@ switch (aspectRatio) {
 
     res.status(200).json({
       success: true,
-      message: "Image generated successfully",
-      imageUrl,
+      image: imageData,
     });
   } catch (error) {
-    console.log(error.response.data);
-  console.log(error.response.status);
+  console.log("Status:", error.response?.status);
+  console.log("Data:", error.response?.data);
 
-    res.status(500).json({
-      success: false,
-      message: "Error generating image",
-    });
-  }
+  return res.status(500).json({
+    success: false,
+    message: "Error generating image",
+  });
+}
 };
 
 const getImages = async (req, res) => {
@@ -130,9 +143,7 @@ const getImages = async (req, res) => {
       });
     }
 
-    const images = await imageModel
-      .find({ visitorId })
-      .sort({ createdAt: -1 });
+    const images = await imageModel.find({ visitorId }).sort({ createdAt: -1 });
 
     const decryptedImages = images.map((image) => ({
       _id: image._id,
@@ -190,7 +201,6 @@ const getImage = async (req, res) => {
         createdAt: image.createdAt,
       },
     });
-
   } catch (error) {
     console.error(error);
 
@@ -230,7 +240,6 @@ const deleteImage = async (req, res) => {
       success: true,
       message: "Image deleted successfully",
     });
-
   } catch (error) {
     console.error(error);
 
@@ -275,7 +284,6 @@ const favoriteImage = async (req, res) => {
         : "Image removed from favorites",
       favorite: image.favorite,
     });
-
   } catch (error) {
     console.error(error);
 
@@ -318,7 +326,6 @@ const getFavoriteImages = async (req, res) => {
       count: decryptedImages.length,
       images: decryptedImages,
     });
-
   } catch (error) {
     console.error(error);
 
@@ -372,7 +379,6 @@ const searchImages = async (req, res) => {
       count: decryptedImages.length,
       images: decryptedImages,
     });
-
   } catch (error) {
     console.error(error);
 
@@ -394,4 +400,13 @@ const decryptImageUrl = (encryptedimageUrl) => {
   ).toString(CryptoJS.enc.Utf8);
 };
 
-module.exports = { home, generateImage, getImages, deleteImage, favoriteImage, getFavoriteImages, getImage, searchImages };
+module.exports = {
+  home,
+  generateImage,
+  getImages,
+  deleteImage,
+  favoriteImage,
+  getFavoriteImages,
+  getImage,
+  searchImages,
+};
