@@ -2,8 +2,7 @@ const { v4: uuidv4 } = require("uuid");
 const imageModel = require("../models/Image");
 const CryptoJS = require("crypto-js");
 const axios = require("axios");
-const cloudinary = require("../config/cloudinary");
-const streamifier = require("streamifier");
+const sharp = require("sharp");
 
 const home = (req, res) => {
   try {
@@ -57,9 +56,19 @@ const generateImage = async (req, res) => {
     }
 
     let width = 1024;
-    let height = 1024;
+    let height = 400;
 
     switch (aspectRatio) {
+      case "default":
+        width = 1024;
+        height = 400;
+        break;
+
+      case "1:1":
+        width = 1024;
+        height = 1024;
+        break;
+
       case "16:9":
         width = 1280;
         height = 720;
@@ -79,32 +88,80 @@ const generateImage = async (req, res) => {
         width = 768;
         height = 1024;
         break;
-
-      default:
-        width = 1024;
-        height = 1024;
     }
 
-    console.log("Selected model:", model);
+    // console.log("Selected model:", model);
 
     const axios = require("axios");
 
-    const response = await axios.post(
-      `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/ai/run/${model}`,
-      {
-        prompt,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.CLOUDFLARE_API_TOKEN}`,
-          "Content-Type": "application/json",
+    let imageData;
+
+    const PREVIEW_WIDTH = 1728;
+    const PREVIEW_HEIGHT = 806;
+
+    if (model === "@cf/black-forest-labs/flux-1-schnell") {
+      // Flux Schnell returns JSON
+
+      const response = await axios.post(
+        `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/ai/run/${model}`,
+        {
+          prompt,
+          width,
+          height,
         },
-      },
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.CLOUDFLARE_API_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+        },
+      );
 
-    const base64Image = response.data.result.image;
+      const base64Image = response.data.result.image;
 
-    const imageData = `data:image/jpeg;base64,${base64Image}`;
+      // Convert base64 -> Buffer
+      const imageBuffer = Buffer.from(base64Image, "base64");
+
+      // Resize to preview size
+      const resizedBuffer = await sharp(imageBuffer)
+        .resize(PREVIEW_WIDTH, PREVIEW_HEIGHT, {
+          fit: "fill", // fills entire preview
+        })
+        .png()
+        .toBuffer();
+
+      // Convert back to base64
+      imageData = `data:image/png;base64,${resizedBuffer.toString("base64")}`;
+    } else {
+      // SDXL, DreamShaper, Lightning return binary image
+
+      const response = await axios.post(
+        `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/ai/run/${model}`,
+        {
+          prompt,
+          width,
+          height,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.CLOUDFLARE_API_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          responseType: "arraybuffer",
+        },
+      );
+
+      const contentType = response.headers["content-type"];
+
+      // Resize
+      const resizedBuffer = await sharp(response.data)
+        .resize(864, 403, {
+          fit: "fill",
+        })
+        .toBuffer();
+
+      imageData = `data:${contentType};base64,${resizedBuffer.toString("base64")}`;
+    }
 
     const encryptedImageUrl = encryptImageUrl(imageData);
 
@@ -122,14 +179,14 @@ const generateImage = async (req, res) => {
       image: imageData,
     });
   } catch (error) {
-  console.log("Status:", error.response?.status);
-  console.log("Data:", error.response?.data);
+    console.log("Status:", error.response?.status);
+    console.log("Data:", error.response?.data);
 
-  return res.status(500).json({
-    success: false,
-    message: "Error generating image",
-  });
-}
+    return res.status(500).json({
+      success: false,
+      message: "Error generating image",
+    });
+  }
 };
 
 const getImages = async (req, res) => {

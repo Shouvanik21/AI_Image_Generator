@@ -2,6 +2,7 @@ import { useState } from "react";
 
 function AspectRatio() {
   const ratios = [
+    "Default",
     "1:1",
     "16:9",
     "9:16",
@@ -18,7 +19,7 @@ function AspectRatio() {
         Aspect Ratio
       </h3>
 
-      <div className="grid grid-cols-5 gap-1.5">
+      <div className="grid grid-cols-6 gap-2">
 
         {ratios.map((ratio) => (
 

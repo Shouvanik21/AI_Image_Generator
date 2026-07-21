@@ -5,7 +5,6 @@ dotenv.config()
 const cookieParser=require("cookie-parser")
 const connectDB=require("./config/db")
 const imageRoutes=require("./routes/imageRoutes")
-// const testRoutes = require("./routes/testRoutes");
 
 const app=express()
 app.use(
@@ -20,7 +19,6 @@ connectDB()
 
 app.use(cookieParser())
 app.use("/api/auth",imageRoutes)
-// app.use("/api/test", testRoutes);
 
 app.get("/",(req,res)=>{
     res.send("AI Image Studio Backend Running...")

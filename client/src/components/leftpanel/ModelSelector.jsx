@@ -9,13 +9,20 @@ function ModelSelector({ model, setModel }) {
       name: "Flux Schnell",
       value: "@cf/black-forest-labs/flux-1-schnell",
     },
-    {
-      name: "Flux Dev",
-      value: "@cf/black-forest-labs/flux-1-dev",
-    },
+
     {
       name: "SDXL",
       value: "@cf/stabilityai/stable-diffusion-xl-base-1.0",
+    },
+
+    {
+      name: "SDXL Lightning",
+      value: "@cf/bytedance/stable-diffusion-xl-lightning",
+    },
+
+    {
+      name: "DreamShaper 8",
+      value: "@cf/lykon/dreamshaper-8-lcm",
     },
   ];
 

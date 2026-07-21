@@ -1,4 +1,4 @@
-import { CircleHelp, Shuffle } from "lucide-react";
+import { CircleHelp, Shuffle, Copy } from "lucide-react";
 
 function PromptSection({
   prompt,
@@ -44,12 +44,34 @@ function PromptSection({
           onChange={(e) => setPrompt(e.target.value)}
           maxLength={1000}
           placeholder="Describe anything you want AI to create..."
-          className="w-full h-24 bg-[#18181C] border border-white/10 rounded-xl p-4 pr-6 text-white placeholder:text-gray-500 outline-none resize-none focus:border-violet-500 transition"
+          className="w-full h-24 bg-[#18181C] border border-white/10 rounded-xl p-4 pr-8 text-white placeholder:text-gray-500 outline-none resize-none focus:border-violet-500 transition"
         />
 
         <span className="absolute bottom-3 right-5 text-xs text-gray-500">
           {prompt.length}/1000
         </span>
+
+        <button
+        className="
+        absolute
+        top-2
+        right-2
+        w-6
+        h-6
+        rounded-lg
+        bg-black/50
+        backdrop-blur-md
+        border
+        border-white/10
+        flex
+        items-center
+        justify-center
+        hover:bg-black/70
+        transition
+        "
+      >
+        <Copy size={12} className="text-white" />
+      </button>
 
       </div>
 

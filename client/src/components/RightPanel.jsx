@@ -12,7 +12,7 @@ flex-col
 overflow-hidden space-y-3">
       <ImagePreview generatedImage={generatedImage} />
 
-      <ActionButtons />
+      {/* <ActionButtons /> */}
 
       <RecentGenerations />
     </div>
