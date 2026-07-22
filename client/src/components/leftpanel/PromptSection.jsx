@@ -1,16 +1,68 @@
-import { CircleHelp, Shuffle, Copy } from "lucide-react";
+import { useState } from "react";
+import { CircleHelp, Shuffle, Copy, Check } from "lucide-react";
 
 function PromptSection({
   prompt,
   setPrompt,
 }) {
 
+  const randomPrompts = [
+    "A futuristic cyberpunk city at night with neon lights",
+    "An astronaut riding a horse on Mars",
+    "A majestic dragon flying over snowy mountains",
+    "A cozy cabin beside a frozen lake at sunrise",
+    "A magical forest with glowing mushrooms",
+    "A samurai standing in heavy rain",
+    "A floating island with waterfalls and castles",
+    "A photorealistic tiger wearing royal armor",
+    "A spaceship entering a black hole",
+    "An underwater city with glass domes",
+    "A medieval village during autumn",
+    "A cute robot watering flowers in a garden",
+    "A phoenix rising from flames",
+    "A fantasy library with floating books",
+    "A giant whale swimming through the clouds",
+    "An ancient temple hidden in the jungle",
+    "A futuristic Formula 1 car in Tokyo",
+    "A realistic portrait of a Viking warrior",
+    "A snowy mountain village at Christmas",
+    "A mystical wolf with glowing blue eyes"
+  ];
+
+  const [copied, setCopied] = useState(false);
+
+  const copyPrompt = async () => {
+    if (!prompt.trim()) return;
+
+    try {
+      await navigator.clipboard.writeText(prompt);
+      setCopied(true);
+
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleRandomPrompt = () => {
+    let random;
+
+    do {
+      random =
+        randomPrompts[Math.floor(Math.random() * randomPrompts.length)];
+    } while (random === prompt);
+
+    setPrompt(random);
+  };
+
   return (
     <div>
 
       {/* Heading */}
 
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-2">
 
         <div className="flex items-center gap-2">
 
@@ -25,7 +77,7 @@ function PromptSection({
 
         </div>
 
-        <button className="flex items-center gap-2 text-sm text-violet-400 hover:text-violet-300 transition">
+        <button onClick={handleRandomPrompt} className="flex items-center gap-2 text-sm text-violet-400 hover:text-violet-300 transition">
 
           <Shuffle size={15} />
 
@@ -37,14 +89,14 @@ function PromptSection({
 
       {/* Textarea */}
 
-      <div className="relative">
+      <div className="relative mb-[-2px]">
 
         <textarea
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           maxLength={1000}
           placeholder="Describe anything you want AI to create..."
-          className="w-full h-24 bg-[#18181C] border border-white/10 rounded-xl p-4 pr-8 text-white placeholder:text-gray-500 outline-none resize-none focus:border-violet-500 transition"
+          className="prompt-scroll w-full h-24 bg-[#18181C] border border-white/10 rounded-lg p-4 pr-8 text-white placeholder:text-gray-500 outline-none resize-none focus:border-violet-500 transition"
         />
 
         <span className="absolute bottom-3 right-5 text-xs text-gray-500">
@@ -52,7 +104,8 @@ function PromptSection({
         </span>
 
         <button
-        className="
+          onClick={copyPrompt}
+          className="
         absolute
         top-2
         right-2
@@ -69,9 +122,13 @@ function PromptSection({
         hover:bg-black/70
         transition
         "
-      >
-        <Copy size={12} className="text-white" />
-      </button>
+        >
+          {copied ? (
+            <Check size={12} className="text-green-500" />
+          ) : (
+            <Copy size={12} className="text-gray-300" />
+          )}
+        </button>
 
       </div>
 

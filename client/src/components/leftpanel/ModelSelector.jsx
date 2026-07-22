@@ -65,7 +65,7 @@ function ModelSelector({ model, setModel }) {
                   setModel(model.value);
                   setOpen(false);
                 }}
-                className="w-full text-left px-5 py-4 text-white hover:bg-violet-600/20 transition"
+                className="w-full text-left px-4 py-3 text-white hover:bg-violet-600/20 transition"
               >
                 {model.name}
               </button>

@@ -5,7 +5,7 @@ function SliderSection() {
   const [steps, setSteps] = useState(28);
 
   return (
-    <div className="grid grid-cols-2 gap-3">
+    <div className="grid grid-cols-2 gap-3 mt-1.5 mb-1">
 
       {/* Guidance */}
 

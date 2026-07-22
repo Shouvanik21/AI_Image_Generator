@@ -17,7 +17,7 @@ function AspectRatio({ aspectRatio, setAspectRatio }) {
         Aspect Ratio
       </h3>
 
-      <div className="grid grid-cols-6 gap-2">
+      <div className="grid grid-cols-6 gap-2 mb-1">
 
         {ratios.map((ratio) => (
 

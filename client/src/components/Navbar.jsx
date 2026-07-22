@@ -1,6 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import { Image, Moon, CircleHelp } from "lucide-react";
 
 function Navbar() {
+
+  const navigate = useNavigate();
+
   return (
     <header className="h-14 border-b border-white/10 px-6 flex items-center justify-between">
 
@@ -19,7 +23,7 @@ function Navbar() {
 
       <div className="flex items-center gap-3">
 
-        <button className="h-9 px-4 rounded-xl bg-[#18181C] border border-white/10 text-white text-sm hover:bg-[#202025] transition">
+        <button className="h-9 px-4 rounded-xl bg-[#18181C] border border-white/10 text-white text-sm hover:bg-[#202025] transition" onClick={() => navigate("/gallery")}>
           Gallery
         </button>
 

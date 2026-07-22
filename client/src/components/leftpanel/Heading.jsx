@@ -4,7 +4,7 @@ function Heading() {
   return (
     <div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 mt-[-2px]">
 
         <h1 className="text-[30px] font-bold leading-none">
 
@@ -25,7 +25,7 @@ function Heading() {
 
       </div>
 
-      <p className="mt-1 text-sm text-gray-400">
+      <p className="mt-1 mb-[-2px] text-sm text-gray-400">
         Turn your ideas into stunning images with AI.
       </p>
 
