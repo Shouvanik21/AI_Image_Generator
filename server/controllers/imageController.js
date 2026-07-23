@@ -219,13 +219,52 @@ const getImages = async (req, res) => {
       });
     }
 
-    const images = await imageModel.find({ visitorId }).sort({ createdAt: -1 });
+    const images = await imageModel.find({ visitorId }).lean();
 
-    const decryptedImages = images.map((image) => ({
-      _id: image._id,
-      model: image.model,
-      imageUrl: decryptImageUrl(image.encryptedImageUrl),
-      createdAt: image.createdAt,
+    images.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    const decryptedImages = images.map((img) => ({
+      _id: img._id,
+      model: img.model,
+      prompt: img.prompt,
+      image: decryptImageUrl(img.encryptedImageUrl),
+      createdAt: img.createdAt,
+    }));
+
+    return res.status(200).json({
+      success: true,
+      count: decryptedImages.length,
+      images: decryptedImages,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Error fetching images",
+    });
+  }
+};
+
+const getRecentImages = async (req, res) => {
+  try {
+    const visitorId = req.cookies.visitorId_cookie;
+
+    if (!visitorId) {
+      return res.status(400).json({
+        success: false,
+        message: "Visitor ID not found",
+      });
+    }
+
+    const images = await imageModel.find({ visitorId }).sort({ createdAt: -1 }).limit(5);
+
+    const decryptedImages = images.map((img) => ({
+      _id: img._id,
+      model: img.model,
+      prompt: img.prompt,
+      image: decryptImageUrl(img.encryptedImageUrl),
+      createdAt: img.createdAt,
     }));
 
     return res.status(200).json({
@@ -310,7 +349,7 @@ const deleteImage = async (req, res) => {
       });
     }
 
-    await imageModel.findByIdAndDelete(req.params.id);
+    await image.deleteOne();
 
     return res.status(200).json({
       success: true,
@@ -480,6 +519,7 @@ module.exports = {
   home,
   generateImage,
   getImages,
+  getRecentImages,
   deleteImage,
   favoriteImage,
   getFavoriteImages,

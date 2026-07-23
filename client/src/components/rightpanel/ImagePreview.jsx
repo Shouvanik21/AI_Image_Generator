@@ -1,9 +1,36 @@
-import { Download,Heart } from "lucide-react";
+import { Download, Heart } from "lucide-react";
 
 function ImagePreview({ generatedImage, aspectRatio }) {
+  const downloadImage = () => {
+    if (!generatedImage || generatedImage.includes("placehold.co")) {
+      alert("Generate an image first!");
+      return;
+    }
 
-  console.log("Aspect Ratio:", aspectRatio);
-  
+    // Detect image extension from the data URL
+    let extension = "png";
+
+    if (generatedImage.startsWith("data:image/jpeg")) {
+      extension = "jpg";
+    } else if (generatedImage.startsWith("data:image/png")) {
+      extension = "png";
+    } else if (generatedImage.startsWith("data:image/webp")) {
+      extension = "webp";
+    }
+
+    const link = document.createElement("a");
+
+    link.href = generatedImage;
+
+    link.download = `ImagineAI-${Date.now()}.${extension}`;
+
+    document.body.appendChild(link);
+
+    link.click();
+
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="relative">
       <div className="w-full h-[405px] rounded-xl overflow-hidden bg-[#18181C] border border-white/10">
@@ -14,8 +41,8 @@ function ImagePreview({ generatedImage, aspectRatio }) {
           }
           alt="Generated"
           className={`w-full h-full ${
-  aspectRatio === "default" ? "object-cover" : "object-contain"
-} bg-black`}
+            aspectRatio === "default" ? "object-cover" : "object-contain"
+          } bg-black`}
         />
       </div>
 
@@ -37,10 +64,11 @@ function ImagePreview({ generatedImage, aspectRatio }) {
         hover:bg-black/70
         transition
         "
+        onClick={downloadImage}
       >
         <Download size={18} className="text-white" />
       </button>
-      <button
+      {/* <button
         className="
         absolute
         top-4
@@ -60,7 +88,7 @@ function ImagePreview({ generatedImage, aspectRatio }) {
         "
       >
         <Heart size={18} className="text-white" />
-      </button>
+      </button> */}
     </div>
   );
 }

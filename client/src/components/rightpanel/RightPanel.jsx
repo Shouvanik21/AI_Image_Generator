@@ -2,7 +2,7 @@ import ImagePreview from "./ImagePreview";
 import ActionButtons from "./ActionButtons";
 import RecentGenerations from "./RecentGenerations";
 
-function RightPanel({ generatedImage, aspectRatio }) {
+function RightPanel({ generatedImage, aspectRatio, recentImages,loadingRecentImages, }) {
   return (
     <div className="h-[calc(100vh-64px)]
 px-6
@@ -17,7 +17,7 @@ overflow-hidden space-y-3">
 
       {/* <ActionButtons /> */}
 
-      <RecentGenerations />
+      <RecentGenerations recentImages={recentImages} loadingRecentImages={loadingRecentImages}/>
     </div>
   );
 }

@@ -17,12 +17,35 @@ function Home() {
 
   const [model, setModel] = useState("@cf/black-forest-labs/flux-1-schnell");
 
+  const [recentImages, setRecentImages] = useState([]);
+
+  const [loadingRecentImages, setLoadingRecentImages] = useState(true);
+
+  const fetchRecentImages = async () => {
+  try {
+    setLoadingRecentImages(true);
+
+    const { data } = await imageApi.get("/getrecentimages");
+
+    if (data.success) {
+      setRecentImages(
+        data.images.slice(0, 5).map((img) => img.image)
+      );
+    }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    setLoadingRecentImages(false);
+  }
+};
+
   useEffect(() => {
     const initializeVisitor = async () => {
       try {
         await imageApi.get("/");
 
         console.log("Visitor initialized");
+        fetchRecentImages();
       } catch (error) {
         console.log(error);
       }
@@ -47,7 +70,7 @@ function Home() {
             aspectRatio={aspectRatio}
             setAspectRatio={setAspectRatio}
             generatedAspectRatio={generatedAspectRatio}
-    setGeneratedAspectRatio={setGeneratedAspectRatio}
+            setGeneratedAspectRatio={setGeneratedAspectRatio}
             model={model}
             setModel={setModel}
           />
@@ -55,9 +78,11 @@ function Home() {
 
         <div className="p-1">
           <RightPanel
-    generatedImage={generatedImage}
-    aspectRatio={generatedAspectRatio}
-/>
+            generatedImage={generatedImage}
+            aspectRatio={generatedAspectRatio}
+            recentImages={recentImages}
+            loadingRecentImages={loadingRecentImages}
+          />
         </div>
       </div>
     </div>

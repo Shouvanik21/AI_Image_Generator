@@ -8,7 +8,7 @@ function GenerateButton({
   setLoading,
   aspectRatio,
   model,
-  setGeneratedAspectRatio
+  setGeneratedAspectRatio,
 }) {
   const generateImage = async () => {
     if (!prompt.trim()) {
@@ -28,7 +28,7 @@ function GenerateButton({
       console.log(data);
 
       setGeneratedImage(data.image);
-setGeneratedAspectRatio(aspectRatio);
+      setGeneratedAspectRatio(aspectRatio);
     } catch (error) {
       console.log(error);
 

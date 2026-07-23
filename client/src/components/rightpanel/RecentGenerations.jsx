@@ -1,13 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 
-function RecentGenerations() {
-  const images = [
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400",
-    "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=400",
-    "https://images.unsplash.com/photo-1519608487953-e999c86e7455?w=400",
-    "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=400",
-    "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=400",
-  ];
+function RecentGenerations({ recentImages, loadingRecentImages }) {
+
+  const navigate = useNavigate();
 
   return (
     <div className="mt-2 h-[180px] bg-[#121214] border border-white/10 p-3 rounded-xl">
@@ -20,7 +16,7 @@ function RecentGenerations() {
           Recent Generations
         </h2>
 
-        <button className="flex items-center gap-1 text-[12px] text-violet-400 hover:text-violet-300 transition">
+        <button className="flex items-center gap-1 text-[12px] text-violet-400 hover:text-violet-300 transition" onClick={() => navigate("/gallery")}>
 
           View All
 
@@ -32,26 +28,31 @@ function RecentGenerations() {
 
       {/* Thumbnails */}
 
-      <div className="grid grid-cols-5 gap-2">
-
-        {images.map((image, index) => (
-
-          <button
-            key={index}
-            className="h-30 rounded-xl overflow-hidden border border-white/10 hover:border-violet-500 transition"
-          >
-
-            <img
-              src={image}
-              alt=""
-              className="w-full h-full object-cover"
+      {loadingRecentImages ? (
+        <div className="grid grid-cols-5 gap-2">
+          {[1, 2, 3, 4, 5].map((item) => (
+            <div
+              key={item}
+              className="h-30 rounded-xl bg-[#1b1b20] border border-white/10 animate-pulse"
             />
-
-          </button>
-
-        ))}
-
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-5 gap-2">
+          {recentImages.map((img, index) => (
+            <button
+              key={index}
+              className="h-30 rounded-xl overflow-hidden border border-white/10 hover:border-violet-500 transition"
+            >
+              <img
+                src={img}
+                alt=""
+                className="w-full h-full object-cover"
+              />
+            </button>
+          ))}
+        </div>
+      )}
 
     </div>
   );
