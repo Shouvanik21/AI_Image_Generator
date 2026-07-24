@@ -15,15 +15,7 @@ function GalleryHeader() {
 
           <input
             placeholder="Search images..."
-            className="
-
-w-[425px]
-
-h-12
-
-rounded-xl
-
-bg-[#18181C]
+            className="w-[425px] h-12 rounded-xl bg-[#18181C]
 
 border
 
@@ -69,7 +61,6 @@ gap-2
         </button>
       </div>
     </div>
-
   );
 }
 

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import ImageModal from "./ImageModal";
 import ImageCard from "./ImageCard";
+import { Heart } from "lucide-react";
 
-function GalleryGrid({ images, loading, setImages }) {
+function GalleryGrid({ images, loading, setImages,showFavorites }) {
 
     if (loading) {
 
@@ -22,6 +23,26 @@ function GalleryGrid({ images, loading, setImages }) {
         );
 
     }
+    if (images.length === 0) {
+  return (
+    <div className="flex flex-col items-center justify-center py-24 border border-dashed border-white/10 rounded-2xl bg-[#121214]">
+
+      <Heart
+        size={52}
+        className="text-gray-600 mb-5"
+      />
+
+      <h2 className="text-2xl font-semibold text-white">
+        No favorite images
+      </h2>
+
+      <p className="text-gray-400 mt-2 text-center max-w-md">
+        Images you mark as favorites will appear here.
+      </p>
+
+    </div>
+  );
+}
 
     const [selectedImage, setSelectedImage] = useState(null);
 
@@ -36,6 +57,7 @@ function GalleryGrid({ images, loading, setImages }) {
                     image={image}
                     setImages={setImages}
                     onClick={() => setSelectedImage(image)}
+                    showFavorites={showFavorites}
                 />
 
             ))}

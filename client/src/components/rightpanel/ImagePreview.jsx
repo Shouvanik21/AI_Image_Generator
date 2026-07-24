@@ -63,6 +63,7 @@ function ImagePreview({ generatedImage, aspectRatio }) {
         justify-center
         hover:bg-black/70
         transition
+        cursor-pointer
         "
         onClick={downloadImage}
       >

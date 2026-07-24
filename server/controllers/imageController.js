@@ -228,6 +228,7 @@ const getImages = async (req, res) => {
       model: img.model,
       prompt: img.prompt,
       image: decryptImageUrl(img.encryptedImageUrl),
+      favorite: img.favorite,
       createdAt: img.createdAt,
     }));
 
