@@ -73,6 +73,7 @@ function Home() {
             setGeneratedAspectRatio={setGeneratedAspectRatio}
             model={model}
             setModel={setModel}
+            fetchRecentImages={fetchRecentImages}
           />
         </div>
 

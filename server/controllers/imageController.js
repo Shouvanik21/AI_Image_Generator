@@ -3,6 +3,7 @@ const imageModel = require("../models/Image");
 const CryptoJS = require("crypto-js");
 const axios = require("axios");
 const sharp = require("sharp");
+const cloudinary = require("../config/cloudinary");
 
 const home = (req, res) => {
   try {
@@ -57,8 +58,6 @@ const generateImage = async (req, res) => {
 
     let width = 1024;
     let height = 400;
-
-    const axios = require("axios");
 
     let imageData;
     let resizedBuffer;
@@ -180,7 +179,11 @@ const generateImage = async (req, res) => {
       imageData = `data:${contentType};base64,${resizedBuffer.toString("base64")}`;
     }
 
-    const encryptedImageUrl = encryptImageUrl(imageData);
+    const uploadResult = await cloudinary.uploader.upload(imageData, {
+      folder: "ImagineAI",
+    });
+
+    const encryptedImageUrl = encryptImageUrl(uploadResult.secure_url);
 
     const image = new imageModel({
       visitorId,
@@ -193,7 +196,7 @@ const generateImage = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      image: imageData,
+      image: uploadResult.secure_url,
     });
   } catch (error) {
     console.log(error);
@@ -219,9 +222,10 @@ const getImages = async (req, res) => {
       });
     }
 
-    const images = await imageModel.find({ visitorId }).lean();
-
-    images.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const images = await imageModel
+      .find({ visitorId })
+      .sort({ createdAt: -1 })
+      .lean();
 
     const decryptedImages = images.map((img) => ({
       _id: img._id,
@@ -258,7 +262,11 @@ const getRecentImages = async (req, res) => {
       });
     }
 
-    const images = await imageModel.find({ visitorId }).sort({ createdAt: -1 }).limit(5);
+    const images = await imageModel
+      .find({ visitorId })
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .lean();
 
     const decryptedImages = images.map((img) => ({
       _id: img._id,
@@ -313,7 +321,7 @@ const getImage = async (req, res) => {
         prompt: image.prompt,
         model: image.model,
         favorite: image.favorite,
-        imageUrl: decryptImageUrl(image.encryptedImageUrl),
+        image: decryptImageUrl(image.encryptedImageUrl),
         createdAt: image.createdAt,
       },
     });
@@ -347,6 +355,19 @@ const deleteImage = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "Image not found",
+      });
+    }
+
+    const imageUrl = decryptImageUrl(image.encryptedImageUrl);
+
+    const publicId = imageUrl.split("/").slice(-2).join("/").split(".")[0];
+
+    const result = await cloudinary.uploader.destroy(publicId);
+
+    if (result.result !== "ok") {
+      return res.status(500).json({
+        success: false,
+        message: "Failed to delete image from Cloudinary",
       });
     }
 
@@ -426,14 +447,15 @@ const getFavoriteImages = async (req, res) => {
         visitorId,
         favorite: true,
       })
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean();
 
     const decryptedImages = images.map((image) => ({
       _id: image._id,
       prompt: image.prompt,
       model: image.model,
       favorite: image.favorite,
-      imageUrl: decryptImageUrl(image.encryptedImageUrl),
+      image: decryptImageUrl(image.encryptedImageUrl),
       createdAt: image.createdAt,
     }));
 
@@ -479,14 +501,15 @@ const searchImages = async (req, res) => {
           $options: "i",
         },
       })
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .lean();
 
     const decryptedImages = images.map((image) => ({
       _id: image._id,
       prompt: image.prompt,
       model: image.model,
       favorite: image.favorite,
-      imageUrl: decryptImageUrl(image.encryptedImageUrl),
+      image: decryptImageUrl(image.encryptedImageUrl),
       createdAt: image.createdAt,
     }));
 

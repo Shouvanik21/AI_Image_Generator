@@ -1,8 +1,13 @@
 import imageApi from "../../services/imageApi";
 import { Download, Heart, Trash2 } from "lucide-react";
 
-function ImageCard({ image, onClick, setImages, showFavorites }) {
-
+function ImageCard({
+  image,
+  onClick,
+  setImages,
+  setFilteredImages,
+  showFavorites,
+}) {
   const modelNames = {
     "@cf/black-forest-labs/flux-1-schnell": "Flux Schnell",
     "@cf/bytedance/stable-diffusion-xl-lightning": "SDXL Lightning",
@@ -10,36 +15,36 @@ function ImageCard({ image, onClick, setImages, showFavorites }) {
     "@cf/lykon/dreamshaper-8-lcm": "DreamShaper XL",
   };
 
-  const downloadImage = (e) => {
-    // Prevent opening the preview when clicking download
+  const downloadImage = async (e) => {
     e.stopPropagation();
 
-    if (!image.image) {
-      alert("Image not found!");
-      return;
+    try {
+      const response = await fetch(image.image);
+
+      const blob = await response.blob();
+
+      let extension = "png";
+
+      if (blob.type === "image/jpeg") extension = "jpg";
+      else if (blob.type === "image/png") extension = "png";
+      else if (blob.type === "image/webp") extension = "webp";
+
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+
+      link.href = url;
+      link.download = `ImagineAI-${Date.now()}.${extension}`;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.log(error);
+      alert("Failed to download image.");
     }
-
-    let extension = "png";
-
-    if (image.image.startsWith("data:image/jpeg")) {
-      extension = "jpg";
-    } else if (image.image.startsWith("data:image/png")) {
-      extension = "png";
-    } else if (image.image.startsWith("data:image/webp")) {
-      extension = "webp";
-    }
-
-    const link = document.createElement("a");
-
-    link.href = image.image;
-
-    link.download = `ImagineAI-${Date.now()}.${extension}`;
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    document.body.removeChild(link);
   };
 
   const deleteImage = async (e) => {
@@ -55,10 +60,16 @@ function ImageCard({ image, onClick, setImages, showFavorites }) {
       const { data } = await imageApi.delete(`/deleteimage/${image._id}`);
 
       if (data.success) {
-        setImages((prev) => prev.filter((img) => img._id !== image._id));
+  setImages((prev) =>
+    prev.filter((img) => img._id !== image._id)
+  );
 
-        alert("Image deleted successfully.");
-      }
+  setFilteredImages((prev) =>
+    prev.filter((img) => img._id !== image._id)
+  );
+
+  alert("Image deleted successfully.");
+}
     } catch (error) {
       console.log(error);
 
@@ -70,9 +81,9 @@ function ImageCard({ image, onClick, setImages, showFavorites }) {
     e.stopPropagation();
 
     const confirmFavorite = window.confirm(
-        image.favorite
-            ? "Remove this image from favorites?"
-            : "Add this image to favorites?"
+      image.favorite
+        ? "Remove this image from favorites?"
+        : "Add this image to favorites?",
     );
 
     if (!confirmFavorite) return;
@@ -81,28 +92,20 @@ function ImageCard({ image, onClick, setImages, showFavorites }) {
       const { data } = await imageApi.patch(`/favoriteimage/${image._id}`);
 
       if (data.success) {
-
-        setImages((prev) => {
-
+        const updateList = (prev) => {
           let updated = prev.map((img) =>
-            img._id === image._id
-              ? {
-                ...img,
-                favorite: data.favorite,
-              }
-              : img
+            img._id === image._id ? { ...img, favorite: data.favorite } : img,
           );
 
           if (showFavorites) {
-
             updated = updated.filter((img) => img.favorite);
-
           }
 
           return updated;
+        };
 
-        });
-
+        setImages(updateList);
+        setFilteredImages(updateList);
       }
     } catch (error) {
       console.log(error);
@@ -112,40 +115,33 @@ function ImageCard({ image, onClick, setImages, showFavorites }) {
   };
 
   const getTimeAgo = (date) => {
-
     const seconds = Math.floor((Date.now() - new Date(date)) / 1000);
 
     if (seconds < 60) return "Just now";
 
     const minutes = Math.floor(seconds / 60);
 
-    if (minutes < 60)
-      return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+    if (minutes < 60) return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
 
     const hours = Math.floor(minutes / 60);
 
-    if (hours < 24)
-      return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+    if (hours < 24) return `${hours} hour${hours > 1 ? "s" : ""} ago`;
 
     const days = Math.floor(hours / 24);
 
-    if (days < 7)
-      return `${days} day${days > 1 ? "s" : ""} ago`;
+    if (days < 7) return `${days} day${days > 1 ? "s" : ""} ago`;
 
     const weeks = Math.floor(days / 7);
 
-    if (weeks < 5)
-      return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
+    if (weeks < 5) return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
 
     const months = Math.floor(days / 30);
 
-    if (months < 12)
-      return `${months} month${months > 1 ? "s" : ""} ago`;
+    if (months < 12) return `${months} month${months > 1 ? "s" : ""} ago`;
 
     const years = Math.floor(days / 365);
 
     return `${years} year${years > 1 ? "s" : ""} ago`;
-
   };
 
   return (
@@ -175,7 +171,9 @@ hover:ring-violet-500/30"
             {modelNames[image.model] || image.model}
           </span>
 
-          <span className="text-xs text-gray-500">{getTimeAgo(image.createdAt)}</span>
+          <span className="text-xs text-gray-500">
+            {getTimeAgo(image.createdAt)}
+          </span>
         </div>
 
         <div className="flex justify-center items-center mt-4 gap-8">
@@ -196,10 +194,11 @@ hover:ring-violet-500/30"
             onClick={toggleFavorite}
           >
             <Heart
-              className={`${image.favorite
+              className={`${
+                image.favorite
                   ? "text-violet-500 fill-violet-500"
                   : "text-gray-400"
-                }`}
+              }`}
             />
           </button>
 

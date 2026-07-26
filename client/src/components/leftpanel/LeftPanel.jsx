@@ -16,7 +16,7 @@ function LeftPanel({
   aspectRatio,
   setAspectRatio,
   model,
-  setModel,setGeneratedAspectRatio
+  setModel,setGeneratedAspectRatio,fetchRecentImages,
 }) {
   return (
     <div className="h-full px-6 py-5 flex flex-col">
@@ -54,6 +54,7 @@ function LeftPanel({
           aspectRatio={aspectRatio}
           setGeneratedAspectRatio={setGeneratedAspectRatio}
           model={model}
+          fetchRecentImages={fetchRecentImages}
         />
       </div>
     </div>

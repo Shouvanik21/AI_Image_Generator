@@ -1,35 +1,43 @@
 import { Download, Heart } from "lucide-react";
 
 function ImagePreview({ generatedImage, aspectRatio }) {
-  const downloadImage = () => {
-    if (!generatedImage || generatedImage.includes("placehold.co")) {
-      alert("Generate an image first!");
-      return;
-    }
+  const downloadImage = async () => {
+  if (
+    !generatedImage ||
+    generatedImage.includes("placehold.co")
+  ) {
+    alert("Generate an image first!");
+    return;
+  }
 
-    // Detect image extension from the data URL
+  try {
+    const response = await fetch(generatedImage);
+
+    const blob = await response.blob();
+
     let extension = "png";
 
-    if (generatedImage.startsWith("data:image/jpeg")) {
-      extension = "jpg";
-    } else if (generatedImage.startsWith("data:image/png")) {
-      extension = "png";
-    } else if (generatedImage.startsWith("data:image/webp")) {
-      extension = "webp";
-    }
+    if (blob.type === "image/jpeg") extension = "jpg";
+    else if (blob.type === "image/png") extension = "png";
+    else if (blob.type === "image/webp") extension = "webp";
+
+    const url = window.URL.createObjectURL(blob);
 
     const link = document.createElement("a");
 
-    link.href = generatedImage;
-
+    link.href = url;
     link.download = `ImagineAI-${Date.now()}.${extension}`;
 
     document.body.appendChild(link);
-
     link.click();
-
     document.body.removeChild(link);
-  };
+
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.log(error);
+    alert("Failed to download image.");
+  }
+};
 
   return (
     <div className="relative">
@@ -40,9 +48,8 @@ function ImagePreview({ generatedImage, aspectRatio }) {
             "https://placehold.co/1024x768/18181C/FFFFFF?text=Generate+an+Image"
           }
           alt="Generated"
-          className={`w-full h-full ${
-            aspectRatio === "default" ? "object-cover" : "object-contain"
-          } bg-black`}
+          className={`w-full h-full ${aspectRatio === "default" ? "object-cover" : "object-contain"
+            } bg-black`}
         />
       </div>
 

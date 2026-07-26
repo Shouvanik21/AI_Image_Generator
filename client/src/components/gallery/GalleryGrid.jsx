@@ -1,9 +1,9 @@
 import { useState } from "react";
 import ImageModal from "./ImageModal";
 import ImageCard from "./ImageCard";
-import { Heart } from "lucide-react";
+import { Heart, Image } from "lucide-react";
 
-function GalleryGrid({ images, loading, setImages,showFavorites }) {
+function GalleryGrid({ images, loading, setImages,setFilteredImages, showFavorites }) {
 
     if (loading) {
 
@@ -24,25 +24,30 @@ function GalleryGrid({ images, loading, setImages,showFavorites }) {
 
     }
     if (images.length === 0) {
-  return (
-    <div className="flex flex-col items-center justify-center py-24 border border-dashed border-white/10 rounded-2xl bg-[#121214]">
+        return (
+            <div className="flex flex-col items-center justify-center py-24 border border-dashed border-white/10 rounded-2xl bg-[#121214]">
 
-      <Heart
-        size={52}
-        className="text-gray-600 mb-5"
-      />
+                {showFavorites ? <Heart
+                    size={52}
+                    className="text-gray-600 mb-5"
+                /> : <Image
+                    size={52}
+                    className="text-gray-600 mb-5"
+                />}
 
-      <h2 className="text-2xl font-semibold text-white">
-        No favorite images
-      </h2>
+                <h2 className="text-2xl font-semibold text-white">
+                    {showFavorites ? "No favorite images" : "No images found"}
+                </h2>
 
-      <p className="text-gray-400 mt-2 text-center max-w-md">
-        Images you mark as favorites will appear here.
-      </p>
+                <p className="text-gray-400 mt-2 text-center max-w-md">
+                    {showFavorites
+                        ? "Images you mark as favorites will appear here."
+                        : "Generate some AI images to start building your gallery."}
+                </p>
 
-    </div>
-  );
-}
+            </div>
+        );
+    }
 
     const [selectedImage, setSelectedImage] = useState(null);
 
@@ -50,19 +55,20 @@ function GalleryGrid({ images, loading, setImages,showFavorites }) {
         <>
             <div className="grid grid-cols-4 gap-8">
 
-            {images.map((image) => (
+                {images.map((image) => (
 
-                <ImageCard
-                    key={image._id}
-                    image={image}
-                    setImages={setImages}
-                    onClick={() => setSelectedImage(image)}
-                    showFavorites={showFavorites}
-                />
+                    <ImageCard
+                        key={image._id}
+    image={image}
+    setImages={setImages}
+    setFilteredImages={setFilteredImages}
+    onClick={() => setSelectedImage(image)}
+    showFavorites={showFavorites}
+                    />
 
-            ))}
+                ))}
 
-        </div>
+            </div>
             <ImageModal
 
                 image={selectedImage}
@@ -71,8 +77,8 @@ function GalleryGrid({ images, loading, setImages,showFavorites }) {
 
             />
         </>
-        
-        
+
+
 
     );
 

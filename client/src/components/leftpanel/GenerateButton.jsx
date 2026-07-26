@@ -9,6 +9,7 @@ function GenerateButton({
   aspectRatio,
   model,
   setGeneratedAspectRatio,
+  fetchRecentImages,
 }) {
   const generateImage = async () => {
     if (!prompt.trim()) {
@@ -17,25 +18,27 @@ function GenerateButton({
     }
 
     try {
-      setLoading(true);
+  setLoading(true);
 
-      const { data } = await imageApi.post("/generateimage", {
-        prompt,
-        model,
-        aspectRatio,
-      });
+  const { data } = await imageApi.post("/generateimage", {
+    prompt,
+    model,
+    aspectRatio,
+  });
 
-      console.log(data);
+  setGeneratedImage(data.image);
+  setGeneratedAspectRatio(aspectRatio);
 
-      setGeneratedImage(data.image);
-      setGeneratedAspectRatio(aspectRatio);
-    } catch (error) {
-      console.log(error);
+  setLoading(false);
 
-      alert("Image generation failed.");
-    } finally {
-      setLoading(false);
-    }
+  fetchRecentImages();
+
+} catch (error) {
+  console.log(error);
+  alert("Image generation failed.");
+
+  setLoading(false);
+}
   };
 
   return (
