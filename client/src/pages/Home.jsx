@@ -21,6 +21,9 @@ function Home() {
 
   const [loadingRecentImages, setLoadingRecentImages] = useState(true);
 
+  const [guidance, setGuidance] = useState(7);
+const [steps, setSteps] = useState(28);
+
   const fetchRecentImages = async () => {
   try {
     setLoadingRecentImages(true);
@@ -74,6 +77,10 @@ function Home() {
             model={model}
             setModel={setModel}
             fetchRecentImages={fetchRecentImages}
+            guidance={guidance}
+  setGuidance={setGuidance}
+  steps={steps}
+  setSteps={setSteps}
           />
         </div>
 

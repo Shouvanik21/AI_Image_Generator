@@ -8,6 +8,8 @@ function GenerateButton({
   setLoading,
   aspectRatio,
   model,
+  guidance,
+  steps,
   setGeneratedAspectRatio,
   fetchRecentImages,
 }) {
@@ -24,6 +26,8 @@ function GenerateButton({
     prompt,
     model,
     aspectRatio,
+    guidance,
+  steps,
   });
 
   setGeneratedImage(data.image);

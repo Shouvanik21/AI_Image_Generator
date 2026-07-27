@@ -37,7 +37,8 @@ const home = (req, res) => {
 
 const generateImage = async (req, res) => {
   try {
-    const { prompt, model, aspectRatio } = req.body;
+    const { prompt, model, aspectRatio, guidance,
+  steps } = req.body;
     const visitorId = req.cookies.visitorId_cookie;
 
     // console.log("Prompt:", prompt);

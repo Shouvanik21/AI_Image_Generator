@@ -1,10 +1,12 @@
 import { useState } from "react";
 
-function SliderSection() {
-  const [guidance, setGuidance] = useState(7);
-  const [steps, setSteps] = useState(28);
-
-  return (
+function SliderSection({
+  guidance,
+  setGuidance,
+  steps,
+  setSteps,
+}) {
+    return (
     <div className="grid grid-cols-2 gap-3 mt-1.5 mb-1">
 
       {/* Guidance */}

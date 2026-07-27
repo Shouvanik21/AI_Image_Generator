@@ -119,6 +119,12 @@ function Gallery() {
     });
   }, [currentPage]);
 
+  const allImagesCount = filteredImages.length;
+
+const favoriteImagesCount = filteredImages.filter(
+  (img) => img.favorite
+).length;
+
   return (
     <div className="prompt-scroll min-h-screen bg-[#08080b]">
       <GalleryNavbar />
@@ -138,6 +144,8 @@ function Gallery() {
           showFavorites={showFavorites}
           setShowFavorites={setShowFavorites}
           setCurrentPage={setCurrentPage}
+          allImagesCount={allImagesCount}
+  favoriteImagesCount={favoriteImagesCount}
         />
 
         <GalleryGrid

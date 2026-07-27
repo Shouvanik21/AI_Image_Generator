@@ -11,6 +11,10 @@ function LeftPanel({
   setPrompt,
   generatedImage,
   setGeneratedImage,
+  guidance,
+  setGuidance,
+  steps,
+  setSteps,
   loading,
   setLoading,
   aspectRatio,
@@ -31,7 +35,10 @@ function LeftPanel({
       </div>
 
       <div className="mt-3">
-        <SliderSection />
+        <SliderSection guidance={guidance}
+  setGuidance={setGuidance}
+  steps={steps}
+  setSteps={setSteps}/>
       </div>
 
       <div className="mt-3">
@@ -55,6 +62,8 @@ function LeftPanel({
           setGeneratedAspectRatio={setGeneratedAspectRatio}
           model={model}
           fetchRecentImages={fetchRecentImages}
+          guidance={guidance}
+steps={steps}
         />
       </div>
     </div>

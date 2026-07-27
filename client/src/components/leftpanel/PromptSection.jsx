@@ -92,19 +92,23 @@ function PromptSection({
   const [copied, setCopied] = useState(false);
 
   const copyPrompt = async () => {
-    if (!prompt.trim()) return;
+  if (!prompt.trim()) {
+    alert("Please enter a prompt before copying.");
+    return;
+  }
 
-    try {
-      await navigator.clipboard.writeText(prompt);
-      setCopied(true);
+  try {
+    await navigator.clipboard.writeText(prompt);
+    setCopied(true);
 
-      setTimeout(() => {
-        setCopied(false);
-      }, 2000);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  } catch (error) {
+    console.log(error);
+    alert("Failed to copy prompt.");
+  }
+};
 
   const handleRandomPrompt = () => {
     let random;
