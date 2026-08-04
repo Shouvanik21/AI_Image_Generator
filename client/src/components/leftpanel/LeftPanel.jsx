@@ -20,14 +20,32 @@ function LeftPanel({
   aspectRatio,
   setAspectRatio,
   model,
-  setModel,setGeneratedAspectRatio,fetchRecentImages,
+  setModel,
+  setGeneratedAspectRatio,
+  fetchRecentImages,
+  enhancePrompt,
+  setEnhancePrompt,
+  stylePreset,
+  setStylePreset,
+  originalPrompt,
+  setOriginalPrompt,
+  enhancedPrompt,
+  setEnhancedPrompt,
 }) {
   return (
     <div className="h-full px-6 py-5 flex flex-col">
       <Heading />
 
       <div className="mt-3">
-        <PromptSection prompt={prompt} setPrompt={setPrompt} />
+        <PromptSection
+          prompt={prompt}
+          setPrompt={setPrompt}
+          originalPrompt={originalPrompt}
+          setOriginalPrompt={setOriginalPrompt}
+          enhancedPrompt={enhancedPrompt}
+          setEnhancedPrompt={setEnhancedPrompt}
+          enhancePrompt={enhancePrompt}
+        />
       </div>
 
       <div className="mt-3">
@@ -35,10 +53,12 @@ function LeftPanel({
       </div>
 
       <div className="mt-3">
-        <SliderSection guidance={guidance}
-  setGuidance={setGuidance}
-  steps={steps}
-  setSteps={setSteps}/>
+        <SliderSection
+          guidance={guidance}
+          setGuidance={setGuidance}
+          steps={steps}
+          setSteps={setSteps}
+        />
       </div>
 
       <div className="mt-3">
@@ -49,7 +69,16 @@ function LeftPanel({
       </div>
 
       <div className="mt-3">
-        <AdvancedSettings />
+        <AdvancedSettings
+          prompt={prompt}
+          setPrompt={setPrompt}
+          originalPrompt={originalPrompt}
+          setOriginalPrompt={setOriginalPrompt}
+          enhancePrompt={enhancePrompt}
+          setEnhancePrompt={setEnhancePrompt}
+          stylePreset={stylePreset}
+          setStylePreset={setStylePreset}
+        />
       </div>
 
       <div className="mt-3">
@@ -63,7 +92,9 @@ function LeftPanel({
           model={model}
           fetchRecentImages={fetchRecentImages}
           guidance={guidance}
-steps={steps}
+          steps={steps}
+          enhancePrompt={enhancePrompt}
+          stylePreset={stylePreset}
         />
       </div>
     </div>

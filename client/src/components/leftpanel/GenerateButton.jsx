@@ -12,6 +12,8 @@ function GenerateButton({
   steps,
   setGeneratedAspectRatio,
   fetchRecentImages,
+  enhancePrompt,
+stylePreset,
 }) {
   const generateImage = async () => {
     if (!prompt.trim()) {
@@ -28,6 +30,8 @@ function GenerateButton({
     aspectRatio,
     guidance,
   steps,
+  enhancePrompt,
+    stylePreset,
   });
 
   setGeneratedImage(data.image);

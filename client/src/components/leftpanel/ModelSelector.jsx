@@ -44,7 +44,7 @@ function ModelSelector({ model, setModel }) {
       <div className="relative">
         <button
           onClick={() => setOpen(!open)}
-          className="w-full h-10 rounded-xl bg-[#18181C] border border-white/10 px-5 flex items-center justify-between hover:border-violet-500 transition"
+          className="w-full h-10 rounded-xl bg-[#18181C] border border-white/10 px-5 p-2.75 flex items-center justify-between hover:border-violet-500 transition"
         >
           <span className="text-white">
             {models.find((m) => m.value === model)?.name}
@@ -65,7 +65,7 @@ function ModelSelector({ model, setModel }) {
                   setModel(model.value);
                   setOpen(false);
                 }}
-                className="w-full text-left px-4 py-3 text-white hover:bg-violet-600/20 transition"
+                className="w-full text-left p-2.75 text-white hover:bg-violet-600/20 transition"
               >
                 {model.name}
               </button>

@@ -22,25 +22,29 @@ function Home() {
   const [loadingRecentImages, setLoadingRecentImages] = useState(true);
 
   const [guidance, setGuidance] = useState(7);
-const [steps, setSteps] = useState(28);
+  const [steps, setSteps] = useState(28);
+
+  const [enhancePrompt, setEnhancePrompt] = useState(false);
+  const [stylePreset, setStylePreset] = useState("none");
+
+  const [originalPrompt, setOriginalPrompt] = useState("");
+  const [enhancedPrompt, setEnhancedPrompt] = useState("");
 
   const fetchRecentImages = async () => {
-  try {
-    setLoadingRecentImages(true);
+    try {
+      setLoadingRecentImages(true);
 
-    const { data } = await imageApi.get("/getrecentimages");
+      const { data } = await imageApi.get("/getrecentimages");
 
-    if (data.success) {
-      setRecentImages(
-        data.images.slice(0, 5).map((img) => img.image)
-      );
+      if (data.success) {
+        setRecentImages(data.images.slice(0, 5).map((img) => img.image));
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoadingRecentImages(false);
     }
-  } catch (error) {
-    console.log(error);
-  } finally {
-    setLoadingRecentImages(false);
-  }
-};
+  };
 
   useEffect(() => {
     const initializeVisitor = async () => {
@@ -78,9 +82,17 @@ const [steps, setSteps] = useState(28);
             setModel={setModel}
             fetchRecentImages={fetchRecentImages}
             guidance={guidance}
-  setGuidance={setGuidance}
-  steps={steps}
-  setSteps={setSteps}
+            setGuidance={setGuidance}
+            steps={steps}
+            setSteps={setSteps}
+            enhancePrompt={enhancePrompt}
+            setEnhancePrompt={setEnhancePrompt}
+            stylePreset={stylePreset}
+            setStylePreset={setStylePreset}
+            originalPrompt={originalPrompt}
+            setOriginalPrompt={setOriginalPrompt}
+            enhancedPrompt={enhancedPrompt}
+            setEnhancedPrompt={setEnhancedPrompt}
           />
         </div>
 

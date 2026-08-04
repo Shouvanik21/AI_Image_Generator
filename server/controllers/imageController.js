@@ -4,6 +4,7 @@ const CryptoJS = require("crypto-js");
 const axios = require("axios");
 const sharp = require("sharp");
 const cloudinary = require("../config/cloudinary");
+const enhancePromptWithGroq = require("../utils/groqEnhancer");
 
 const home = (req, res) => {
   try {
@@ -37,8 +38,25 @@ const home = (req, res) => {
 
 const generateImage = async (req, res) => {
   try {
-    const { prompt, model, aspectRatio, guidance,
-  steps } = req.body;
+    const {
+      prompt,
+      model,
+      aspectRatio,
+      guidance,
+      steps,
+      enhancePrompt,
+      stylePreset,
+    } = req.body;
+
+    console.log({
+      prompt,
+      model,
+      aspectRatio,
+      guidance,
+      steps,
+      enhancePrompt,
+      stylePreset,
+    });
     const visitorId = req.cookies.visitorId_cookie;
 
     // console.log("Prompt:", prompt);
@@ -97,13 +115,32 @@ const generateImage = async (req, res) => {
         previewHeight = 806;
     }
 
+    let finalPrompt = prompt;
+
+    const stylePrompts = {
+      none: "",
+
+      photorealistic:
+        "Ultra photorealistic, DSLR photography, highly detailed, natural lighting, 8k resolution, realistic textures, ",
+
+      anime:
+        "Anime style, vibrant colors, cel shading, Studio Ghibli inspired, masterpiece, ",
+
+      fantasy:
+        "Epic fantasy artwork, magical atmosphere, cinematic lighting, mystical environment, highly detailed concept art, ",
+    };
+
+    if (stylePreset !== "none") {
+      finalPrompt = stylePrompts[stylePreset] + finalPrompt;
+    }
+
     if (model === "@cf/black-forest-labs/flux-1-schnell") {
       // Flux Schnell returns JSON
 
       const response = await axios.post(
         `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/ai/run/${model}`,
         {
-          prompt,
+          prompt: finalPrompt,
           width,
           height,
         },
@@ -146,7 +183,7 @@ const generateImage = async (req, res) => {
       const response = await axios.post(
         `https://api.cloudflare.com/client/v4/accounts/${process.env.CLOUDFLARE_ACCOUNT_ID}/ai/run/${model}`,
         {
-          prompt,
+          prompt: finalPrompt,
           width,
           height,
         },
@@ -540,6 +577,23 @@ const decryptImageUrl = (encryptedimageUrl) => {
   ).toString(CryptoJS.enc.Utf8);
 };
 
+const enhancePromptOnly = async (req, res) => {
+  try {
+    const { prompt } = req.body;
+
+    const enhanced = await enhancePromptWithGroq(prompt);
+
+    return res.json({
+      success: true,
+      prompt: enhanced,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+    });
+  }
+};
+
 module.exports = {
   home,
   generateImage,
@@ -550,4 +604,5 @@ module.exports = {
   getFavoriteImages,
   getImage,
   searchImages,
+  enhancePromptOnly
 };
