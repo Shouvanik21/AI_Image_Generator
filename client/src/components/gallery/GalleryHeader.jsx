@@ -103,50 +103,50 @@ function GalleryHeader({
               <h3 className="text-white font-semibold mb-4">Sort By</h3>
 
               <CustomDropdown
-  value={sortBy}
-  onChange={setSortBy}
-  placeholder="Sort"
-  options={[
-    {
-      label: "Newest First",
-      value: "newest",
-    },
-    {
-      label: "Oldest First",
-      value: "oldest",
-    },
-  ]}
-/>
+                value={sortBy}
+                onChange={setSortBy}
+                placeholder="Sort"
+                options={[
+                  {
+                    label: "Newest First",
+                    value: "newest",
+                  },
+                  {
+                    label: "Oldest First",
+                    value: "oldest",
+                  },
+                ]}
+              />
 
               <h3 className="text-white font-semibold mt-6 mb-4">Model</h3>
 
               <CustomDropdown
-  value={selectedModel}
-  onChange={setSelectedModel}
-  placeholder="All Models"
-  options={[
-    {
-      label: "All Models",
-      value: "all",
-    },
-    {
-      label: "Flux Schnell",
-      value: "@cf/black-forest-labs/flux-1-schnell",
-    },
-    {
-      label: "SDXL Lightning",
-      value: "@cf/bytedance/stable-diffusion-xl-lightning",
-    },
-    {
-      label: "Stable Diffusion XL",
-      value: "@cf/stabilityai/stable-diffusion-xl-base-1.0",
-    },
-    {
-      label: "DreamShaper XL",
-      value: "@cf/lykon/dreamshaper-8-lcm",
-    },
-  ]}
-/>
+                value={selectedModel}
+                onChange={setSelectedModel}
+                placeholder="All Models"
+                options={[
+                  {
+                    label: "All Models",
+                    value: "all",
+                  },
+                  {
+                    label: "Flux Schnell",
+                    value: "@cf/black-forest-labs/flux-1-schnell",
+                  },
+                  {
+                    label: "SDXL Lightning",
+                    value: "@cf/bytedance/stable-diffusion-xl-lightning",
+                  },
+                  {
+                    label: "Stable Diffusion XL",
+                    value: "@cf/stabilityai/stable-diffusion-xl-base-1.0",
+                  },
+                  {
+                    label: "DreamShaper XL",
+                    value: "@cf/lykon/dreamshaper-8-lcm",
+                  },
+                ]}
+              />
             </div>
           )}
         </div>

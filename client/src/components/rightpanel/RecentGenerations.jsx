@@ -2,28 +2,24 @@ import { useNavigate } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 
 function RecentGenerations({ recentImages, loadingRecentImages }) {
-
   const navigate = useNavigate();
 
   return (
     <div className="mt-2 h-[180px] bg-[#121214] border border-white/10 p-3 rounded-xl">
-
       {/* Header */}
 
       <div className="flex items-center justify-between mb-2">
-
         <h2 className="text-white text-[15px] font-semibold">
           Recent Generations
         </h2>
 
-        <button className="flex items-center gap-1 text-[12px] text-violet-400 hover:text-violet-300 transition" onClick={() => navigate("/gallery")}>
-
+        <button
+          className="flex items-center gap-1 text-[12px] text-violet-400 hover:text-violet-300 transition"
+          onClick={() => navigate("/gallery")}
+        >
           View All
-
           <ChevronRight size={14} />
-
         </button>
-
       </div>
 
       {/* Thumbnails */}
@@ -44,16 +40,11 @@ function RecentGenerations({ recentImages, loadingRecentImages }) {
               key={index}
               className="h-30 rounded-xl overflow-hidden border border-white/10 hover:border-violet-500 transition"
             >
-              <img
-                src={img}
-                alt=""
-                className="w-full h-full object-cover"
-              />
+              <img src={img} alt="" className="w-full h-full object-cover" />
             </button>
           ))}
         </div>
       )}
-
     </div>
   );
 }

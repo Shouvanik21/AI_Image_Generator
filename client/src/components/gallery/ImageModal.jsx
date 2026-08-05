@@ -1,7 +1,6 @@
 import { X } from "lucide-react";
 
 function ImageModal({ image, onClose }) {
-
   if (!image) return null;
 
   return (
@@ -19,7 +18,6 @@ function ImageModal({ image, onClose }) {
       p-10
       "
     >
-
       <div
         onClick={(e) => e.stopPropagation()}
         className="
@@ -28,7 +26,6 @@ function ImageModal({ image, onClose }) {
         max-h-[90vh]
         "
       >
-
         <img
           src={image.image}
           alt={image.prompt}
@@ -57,9 +54,7 @@ function ImageModal({ image, onClose }) {
         >
           <X size={18} className="mx-auto" />
         </button>
-
       </div>
-
     </div>
   );
 }

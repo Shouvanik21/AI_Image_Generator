@@ -14,21 +14,14 @@ function StylePresetDropdown({ value, onChange }) {
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target)
-      ) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setOpen(false);
       }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
 
-    return () =>
-      document.removeEventListener(
-        "mousedown",
-        handleClickOutside
-      );
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
@@ -37,15 +30,11 @@ function StylePresetDropdown({ value, onChange }) {
         onClick={() => setOpen(!open)}
         className="w-full bg-[#111114] border border-white/10 rounded-xl p-2.75 flex justify-between items-center text-white"
       >
-        <span>
-          {options.find((o) => o.value === value)?.label}
-        </span>
+        <span>{options.find((o) => o.value === value)?.label}</span>
 
         <ChevronDown
           size={18}
-          className={`text-white transition ${
-            open ? "rotate-180" : ""
-          }`}
+          className={`text-white transition ${open ? "rotate-180" : ""}`}
         />
       </button>
 
@@ -59,9 +48,7 @@ function StylePresetDropdown({ value, onChange }) {
                 setOpen(false);
               }}
               className={`w-full text-left p-2.75 hover:bg-violet-600/20 transition ${
-                value === option.value
-                  ? "text-violet-400"
-                  : "text-white"
+                value === option.value ? "text-violet-400" : "text-white"
               }`}
             >
               {option.label}

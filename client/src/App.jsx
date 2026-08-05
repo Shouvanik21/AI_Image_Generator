@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import Gallery from "./pages/Gallery";
 import Favorites from "./pages/Favorites";
 
-const App=()=> {
+const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
@@ -12,6 +12,6 @@ const App=()=> {
       <Route path="/favorites" element={<Favorites />} />
     </Routes>
   );
-}
+};
 
 export default App;

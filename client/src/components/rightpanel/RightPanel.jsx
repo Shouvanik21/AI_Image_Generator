@@ -1,23 +1,27 @@
 import ImagePreview from "./ImagePreview";
-import ActionButtons from "./ActionButtons";
 import RecentGenerations from "./RecentGenerations";
 
-function RightPanel({ generatedImage, aspectRatio, recentImages,loadingRecentImages, }) {
+function RightPanel({
+  generatedImage,
+  aspectRatio,
+  recentImages,
+  loadingRecentImages,
+}) {
   return (
-    <div className="h-[calc(100vh-64px)]
+    <div
+      className="h-[calc(100vh-64px)]
 px-6
 py-4
 flex
 flex-col
-overflow-hidden space-y-3">
-      <ImagePreview
-    generatedImage={generatedImage}
-    aspectRatio={aspectRatio}
-/>
+overflow-hidden space-y-3"
+    >
+      <ImagePreview generatedImage={generatedImage} aspectRatio={aspectRatio} />
 
-      {/* <ActionButtons /> */}
-
-      <RecentGenerations recentImages={recentImages} loadingRecentImages={loadingRecentImages}/>
+      <RecentGenerations
+        recentImages={recentImages}
+        loadingRecentImages={loadingRecentImages}
+      />
     </div>
   );
 }

@@ -604,5 +604,5 @@ module.exports = {
   getFavoriteImages,
   getImage,
   searchImages,
-  enhancePromptOnly
+  enhancePromptOnly,
 };

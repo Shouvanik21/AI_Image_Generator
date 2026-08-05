@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { CircleHelp, Shuffle, Copy, Check } from "lucide-react";
 
-function PromptSection({ prompt, setPrompt ,originalPrompt,
-    setOriginalPrompt,
- }) {
+function PromptSection({
+  prompt,
+  setPrompt,
+  originalPrompt,
+  setOriginalPrompt,
+}) {
   const randomPrompts = [
     "A futuristic cyberpunk city at night with neon lights",
     "An astronaut riding a horse on Mars",
@@ -122,11 +125,47 @@ function PromptSection({ prompt, setPrompt ,originalPrompt,
     <div>
       {/* Heading */}
 
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
         <div className="flex items-center gap-2">
           <h3 className="text-white text-lg font-semibold">Prompt</h3>
 
-          <CircleHelp size={16} className="text-gray-500" />
+          <div className="relative group">
+            <CircleHelp size={16} className="text-gray-500" />
+            <div
+              className="
+      absolute
+      left-0
+      -translate-x-18
+      top-full
+      mt-3
+      w-60 md:w-72
+      rounded-xl
+      border
+      border-white/10
+      bg-[#18181C]
+      p-4
+      shadow-2xl
+      opacity-0
+      invisible
+      group-hover:opacity-100
+      group-hover:visible
+      transition-all
+      duration-300
+      z-50
+      "
+            >
+              <h3 className="text-violet-500 font-semibold mb-2">
+                Prompt Guide
+              </h3>
+
+              <p className="text-sm text-gray-400 leading-relaxed">
+                Describe the image you want in as much detail as possible.
+                Mention the subject, background, lighting, camera angle, colors,
+                artistic style, and mood. The more descriptive your prompt is,
+                the better the generated image will be.
+              </p>
+            </div>
+          </div>
         </div>
 
         <button
@@ -149,7 +188,7 @@ function PromptSection({ prompt, setPrompt ,originalPrompt,
           }}
           maxLength={1000}
           placeholder="Describe anything you want AI to create..."
-          className="prompt-scroll w-full h-24 bg-[#18181C] border border-white/10 rounded-lg p-4 pr-8 text-white placeholder:text-gray-500 outline-none resize-none focus:border-violet-500 transition"
+          className="prompt-scroll w-full h-28 md:h-24 bg-[#18181C] border border-white/10 rounded-lg p-4 pr-8 text-white placeholder:text-gray-500 outline-none resize-none focus:border-violet-500 transition"
         />
 
         <button

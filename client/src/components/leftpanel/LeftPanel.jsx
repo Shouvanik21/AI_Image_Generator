@@ -33,7 +33,7 @@ function LeftPanel({
   setEnhancedPrompt,
 }) {
   return (
-    <div className="h-full px-6 py-5 flex flex-col">
+    <div className="h-full px-4 md:px-6 py-4 md:py-5 flex flex-col overflow-y-auto">
       <Heading />
 
       <div className="mt-3">

@@ -20,7 +20,7 @@ function AdvancedSettings({
       {/* Floating Panel */}
 
       {open && (
-        <div className="absolute bottom-full left-0 w-full mb-3 bg-[#18181C] border border-white/10 rounded-2xl p-4 shadow-2xl z-50">
+        <div className="absolute bottom-full left-0 w-full md:w-full mb-3 bg-[#18181C] border border-white/10 rounded-2xl p-4 shadow-2xl z-50">
           {/* Style Preset */}
 
           <div className="mb-5">

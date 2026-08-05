@@ -1,12 +1,7 @@
 import { ChevronDown, Check } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-function CustomDropdown({
-  value,
-  onChange,
-  options,
-  placeholder,
-}) {
+function CustomDropdown({ value, onChange, options, placeholder }) {
   const [open, setOpen] = useState(false);
 
   const ref = useRef(null);
@@ -20,16 +15,11 @@ function CustomDropdown({
 
     document.addEventListener("mousedown", handleClickOutside);
 
-    return () =>
-      document.removeEventListener(
-        "mousedown",
-        handleClickOutside
-      );
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const selected =
-    options.find((item) => item.value === value)?.label ||
-    placeholder;
+    options.find((item) => item.value === value)?.label || placeholder;
 
   return (
     <div className="w-full" ref={ref}>
@@ -56,14 +46,12 @@ function CustomDropdown({
 
         <ChevronDown
           size={18}
-          className={`transition ${
-            open ? "rotate-180" : ""
-          }`}
+          className={`transition ${open ? "rotate-180" : ""}`}
         />
       </button>
 
       <div
-  className={`
+        className={`
     ${
       open
         ? "mt-2 max-h-80 opacity-100 scale-100"
@@ -81,7 +69,7 @@ function CustomDropdown({
     transition-all
     duration-200
   `}
->
+      >
         {options.map((item) => (
           <button
             key={item.value}
@@ -108,9 +96,7 @@ function CustomDropdown({
           >
             {item.label}
 
-            {value === item.value && (
-              <Check size={16} />
-            )}
+            {value === item.value && <Check size={16} />}
           </button>
         ))}
       </div>

@@ -65,7 +65,7 @@ function Home() {
     <div className="h-screen bg-[#08080b] overflow-hidden">
       <Navbar />
 
-      <div className="flex-1 grid grid-cols-[40%_60%]">
+      <div className="flex flex-col lg:grid lg:grid-cols-[40%_60%] h-[calc(100vh-56px)]">
         <div className="border-r border-white/10">
           <LeftPanel
             prompt={prompt}

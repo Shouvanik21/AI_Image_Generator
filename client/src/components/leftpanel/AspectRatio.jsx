@@ -1,26 +1,14 @@
 import { useState } from "react";
 
 function AspectRatio({ aspectRatio, setAspectRatio }) {
-  const ratios = [
-  "default",
-  "1:1",
-  "16:9",
-  "9:16",
-  "4:3",
-  "3:4",
-];
+  const ratios = ["default", "1:1", "16:9", "9:16", "4:3", "3:4"];
 
   return (
     <div>
-
-      <h3 className="text-white text-sm font-semibold mb-2">
-        Aspect Ratio
-      </h3>
+      <h3 className="text-white text-sm font-semibold mb-2">Aspect Ratio</h3>
 
       <div className="grid grid-cols-6 gap-2 mb-1">
-
         {ratios.map((ratio) => (
-
           <button
             key={ratio}
             onClick={() => setAspectRatio(ratio)}
@@ -34,11 +22,8 @@ function AspectRatio({ aspectRatio, setAspectRatio }) {
           >
             {ratio === "default" ? "Default" : ratio}
           </button>
-
         ))}
-
       </div>
-
     </div>
   );
 }

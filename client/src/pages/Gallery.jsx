@@ -121,9 +121,9 @@ function Gallery() {
 
   const allImagesCount = filteredImages.length;
 
-const favoriteImagesCount = filteredImages.filter(
-  (img) => img.favorite
-).length;
+  const favoriteImagesCount = filteredImages.filter(
+    (img) => img.favorite,
+  ).length;
 
   return (
     <div className="prompt-scroll min-h-screen bg-[#08080b]">
@@ -145,7 +145,7 @@ const favoriteImagesCount = filteredImages.filter(
           setShowFavorites={setShowFavorites}
           setCurrentPage={setCurrentPage}
           allImagesCount={allImagesCount}
-  favoriteImagesCount={favoriteImagesCount}
+          favoriteImagesCount={favoriteImagesCount}
         />
 
         <GalleryGrid

@@ -60,16 +60,14 @@ function ImageCard({
       const { data } = await imageApi.delete(`/deleteimage/${image._id}`);
 
       if (data.success) {
-  setImages((prev) =>
-    prev.filter((img) => img._id !== image._id)
-  );
+        setImages((prev) => prev.filter((img) => img._id !== image._id));
 
-  setFilteredImages((prev) =>
-    prev.filter((img) => img._id !== image._id)
-  );
+        setFilteredImages((prev) =>
+          prev.filter((img) => img._id !== image._id),
+        );
 
-  alert("Image deleted successfully.");
-}
+        alert("Image deleted successfully.");
+      }
     } catch (error) {
       console.log(error);
 

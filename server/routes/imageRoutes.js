@@ -2,10 +2,21 @@ const express = require("express");
 
 const router = express.Router();
 
-const { home, generateImage,getImages,getRecentImages,deleteImage,favoriteImage,getFavoriteImages,getImage,searchImages,enhancePromptOnly } = require("../controllers/imageController");
+const {
+  home,
+  generateImage,
+  getImages,
+  getRecentImages,
+  deleteImage,
+  favoriteImage,
+  getFavoriteImages,
+  getImage,
+  searchImages,
+  enhancePromptOnly,
+} = require("../controllers/imageController");
 
 router.get("/", home);
-router.post("/generateimage",generateImage)
+router.post("/generateimage", generateImage);
 router.get("/getimages", getImages);
 router.get("/getrecentimages", getRecentImages);
 // router.get("/getimage/:id", getImage);
