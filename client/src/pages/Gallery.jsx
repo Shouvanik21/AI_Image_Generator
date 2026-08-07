@@ -126,7 +126,7 @@ function Gallery() {
   ).length;
 
   return (
-    <div className="gallery-scroll h-screen bg-[#08080b] overflow-y-auto">
+    <div className="gallery-scroll min-h-screen bg-[#08080b] overflow-y-auto">
       <GalleryNavbar />
 
       <div className="px-8 py-8">
