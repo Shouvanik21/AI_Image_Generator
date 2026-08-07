@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use("/api/auth", imageRoutes);
 
 app.get("/", (req, res) => {
-  res.send("AI Image Studio Backend Running...");
+  res.send("AI Image Generator Backend Running...");
 });
 
 const PORT = process.env.PORT || 5000;
