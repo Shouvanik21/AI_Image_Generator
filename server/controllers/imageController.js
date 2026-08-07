@@ -329,50 +329,6 @@ const getRecentImages = async (req, res) => {
   }
 };
 
-const getImage = async (req, res) => {
-  try {
-    const visitorId = req.cookies.visitorId_cookie;
-
-    if (!visitorId) {
-      return res.status(400).json({
-        success: false,
-        message: "Visitor ID not found",
-      });
-    }
-
-    const image = await imageModel.findOne({
-      _id: req.params.id,
-      visitorId,
-    });
-
-    if (!image) {
-      return res.status(404).json({
-        success: false,
-        message: "Image not found",
-      });
-    }
-
-    return res.status(200).json({
-      success: true,
-      image: {
-        _id: image._id,
-        prompt: image.prompt,
-        model: image.model,
-        favorite: image.favorite,
-        image: decryptImageUrl(image.encryptedImageUrl),
-        createdAt: image.createdAt,
-      },
-    });
-  } catch (error) {
-    console.error(error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Error fetching image",
-    });
-  }
-};
-
 const deleteImage = async (req, res) => {
   try {
     const visitorId = req.cookies.visitorId_cookie;
@@ -469,49 +425,6 @@ const favoriteImage = async (req, res) => {
   }
 };
 
-const getFavoriteImages = async (req, res) => {
-  try {
-    const visitorId = req.cookies.visitorId_cookie;
-
-    if (!visitorId) {
-      return res.status(400).json({
-        success: false,
-        message: "Visitor ID not found",
-      });
-    }
-
-    const images = await imageModel
-      .find({
-        visitorId,
-        favorite: true,
-      })
-      .sort({ createdAt: -1 })
-      .lean();
-
-    const decryptedImages = images.map((image) => ({
-      _id: image._id,
-      prompt: image.prompt,
-      model: image.model,
-      favorite: image.favorite,
-      image: decryptImageUrl(image.encryptedImageUrl),
-      createdAt: image.createdAt,
-    }));
-
-    return res.status(200).json({
-      success: true,
-      count: decryptedImages.length,
-      images: decryptedImages,
-    });
-  } catch (error) {
-    console.error(error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Error fetching favorite images",
-    });
-  }
-};
-
 const searchImages = async (req, res) => {
   try {
     const visitorId = req.cookies.visitorId_cookie;
@@ -601,8 +514,6 @@ module.exports = {
   getRecentImages,
   deleteImage,
   favoriteImage,
-  getFavoriteImages,
-  getImage,
   searchImages,
   enhancePromptOnly,
 };
